@@ -11,6 +11,7 @@ namespace System.ServiceModel.Security
     public abstract class SecurityAlgorithmSuite
     {
         private static SecurityAlgorithmSuite s_basic256;
+        private static SecurityAlgorithmSuite s_basic128;
         private static SecurityAlgorithmSuite s_tripleDes;
 
         static public SecurityAlgorithmSuite Default
@@ -31,6 +32,19 @@ namespace System.ServiceModel.Security
                 }
 
                 return s_basic256;
+            }
+        }
+
+        static public SecurityAlgorithmSuite Basic128
+        {
+            get
+            {
+                if (s_basic128 == null)
+                {
+                    s_basic128 = new Basic128SecurityAlgorithmSuite();
+                }
+
+                return s_basic128;
             }
         }
 
@@ -138,6 +152,37 @@ namespace System.ServiceModel.Security
         public override string ToString()
         {
             return "Basic256";
+        }
+    }
+
+    public class Basic128SecurityAlgorithmSuite : SecurityAlgorithmSuite
+    {
+        public Basic128SecurityAlgorithmSuite() : base() { }
+
+        public override string DefaultCanonicalizationAlgorithm { get { return DefaultCanonicalizationAlgorithmDictionaryString.Value; } }
+        public override string DefaultDigestAlgorithm { get { return DefaultDigestAlgorithmDictionaryString.Value; } }
+        public override string DefaultEncryptionAlgorithm { get { return DefaultEncryptionAlgorithmDictionaryString.Value; } }
+        public override int DefaultEncryptionKeyDerivationLength { get { return 128; } }
+        public override string DefaultSymmetricKeyWrapAlgorithm { get { return DefaultSymmetricKeyWrapAlgorithmDictionaryString.Value; } }
+        public override string DefaultAsymmetricKeyWrapAlgorithm { get { return DefaultAsymmetricKeyWrapAlgorithmDictionaryString.Value; } }
+        public override string DefaultSymmetricSignatureAlgorithm { get { return DefaultSymmetricSignatureAlgorithmDictionaryString.Value; } }
+        public override string DefaultAsymmetricSignatureAlgorithm { get { return DefaultAsymmetricSignatureAlgorithmDictionaryString.Value; } }
+        public override int DefaultSignatureKeyDerivationLength { get { return 128; } }
+        public override int DefaultSymmetricKeyLength { get { return 128; } }
+        public override bool IsSymmetricKeyLengthSupported(int length) { return length >= 128 && length <= 256; }
+        public override bool IsAsymmetricKeyLengthSupported(int length) { return length >= 1024 && length <= 4096; }
+
+        internal override XmlDictionaryString DefaultCanonicalizationAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.ExclusiveC14n; } }
+        internal override XmlDictionaryString DefaultDigestAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.Sha1Digest; } }
+        internal override XmlDictionaryString DefaultEncryptionAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.Aes128Encryption; } }
+        internal override XmlDictionaryString DefaultSymmetricKeyWrapAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.Aes128KeyWrap; } }
+        internal override XmlDictionaryString DefaultAsymmetricKeyWrapAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.RsaOaepKeyWrap; } }
+        internal override XmlDictionaryString DefaultSymmetricSignatureAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.HmacSha1Signature; } }
+        internal override XmlDictionaryString DefaultAsymmetricSignatureAlgorithmDictionaryString { get { return XD.SecurityAlgorithmDictionary.RsaSha1Signature; } }
+
+        public override string ToString()
+        {
+            return "Basic128";
         }
     }
 

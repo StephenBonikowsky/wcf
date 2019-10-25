@@ -106,6 +106,7 @@ namespace System.ServiceModel.Security
     }
     public abstract partial class SecurityAlgorithmSuite
     {
+        static public SecurityAlgorithmSuite Basic128 { get { return default; } }
         static public SecurityAlgorithmSuite TripleDes { get { return default; } }
         protected SecurityAlgorithmSuite() { }
         public abstract string DefaultCanonicalizationAlgorithm { get; }
